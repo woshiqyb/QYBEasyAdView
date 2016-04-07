@@ -104,7 +104,6 @@
     
     pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, FULL_VIEW_HEIGHT - 40, FULL_VIEW_WIDTH, 40)];
     pageControl.userInteractionEnabled = NO;
-//    pageControl.numberOfPages = _remoteImagesURL.count > 1 ? _remoteImagesURL.count - 2 : _remoteImagesURL.count;
     pageControl.hidesForSinglePage = YES;
     pageControl.pageIndicatorTintColor = _pageIndicatorTintColor;
     pageControl.currentPageIndicatorTintColor = _currentPageIndicatorTintColor;
@@ -149,7 +148,8 @@
 
 #pragma mark - UICollectionView Delegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    NSString *remoteImageURL = _remoteImagesURL[indexPath.item];
+    NSLog(@"点击的链接是%@",remoteImageURL);
 }
 
 #pragma mark - UICollectionView Data Source
