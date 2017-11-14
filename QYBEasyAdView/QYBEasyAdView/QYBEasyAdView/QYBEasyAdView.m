@@ -114,7 +114,10 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
-	[self setupContentView];
+	//auto resize view by xusion
+	easyAdCollectionView.frame = CGRectMake(0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT);
+	easyAdCollectionView.contentSize = CGSizeMake(FULL_VIEW_WIDTH * _remoteImagesURL.count, FULL_VIEW_HEIGHT);
+	pageControl.frame = CGRectMake(0, FULL_VIEW_HEIGHT - 40, FULL_VIEW_WIDTH, 40);
 }
 
 #pragma mark - UIScrollView Delegate
