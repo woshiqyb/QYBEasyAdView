@@ -19,14 +19,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     QYBEasyAdView *easyAd = [[QYBEasyAdView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/3)];
-    easyAd.remoteImagesURL = @[@"http://www.68idc.cn/help/uploads/allimg/130813/09240XD8_0.jpg",
-                               @"http://www.68idc.cn/help/uploads/allimg/130813/09240M4J_0.jpg",
-                               @"http://avatar.csdn.net/2/3/7/3_yuquan0821.jpg",
-                               @"http://avatar.csdn.net/A/A/1/3_u010180166.jpg"
-                               ,@"http://avatar.csdn.net/1/E/5/3_oik_ios.jpg"];
+    easyAd.remoteImagesURL = @[@"https://wx1.sinaimg.cn/mw690/5d3dd8b7ly1flhbmgyqnmj20hs0hsabf.jpg",
+                               @"https://wx2.sinaimg.cn/mw690/5d3dd8b7ly1flhbmhhom1j20hs0hsdgy.jpg",
+                               @"https://wx1.sinaimg.cn/mw690/e7c25bb6gy1flcqljhhzmj20dw0o4770.jpg",
+                               @"https://wx4.sinaimg.cn/mw690/a716fd45ly1flhdegaj8qj20b4075wgp.jpg"
+                               ,@"https://wx3.sinaimg.cn/mw690/6670179bly1flh9x5g8b1j20m80m8jsk.jpg"];
     easyAd.shouldAutoScrolling = YES;
     easyAd.timeInterval = 5;
     [self.view addSubview:easyAd];
+	
+	//add tap event callback by xusion
+	easyAd.onTap = ^(NSInteger index ,NSString* imageURL){
+		NSLog(@"点击的imageURL:%@ index:%ld", imageURL, (long)index);
+	};
     
 }
 

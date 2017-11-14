@@ -19,4 +19,8 @@
 
 @property (nonatomic, strong) UIColor *pageIndicatorTintColor;
 @property (nonatomic, strong) UIColor *currentPageIndicatorTintColor;
+
+//add tap event callback by xusion
+typedef void(^QYBEasyAdViewOnTap)(NSInteger index,NSString* imageURL);
+@property (nonatomic, copy) QYBEasyAdViewOnTap onTap;
 @end

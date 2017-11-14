@@ -48,11 +48,14 @@
 
 - (void)didMoveToWindow {
     if (self.window) {
-        [easyAdCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:currentPage inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-        
-        if (_shouldAutoScrolling) {
-            [self startTimer];
-        }
+		NSInteger count = [easyAdCollectionView numberOfItemsInSection:0];
+		if(count >= currentPage){
+			[easyAdCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:currentPage inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+			
+			if (_shouldAutoScrolling) {
+				[self startTimer];
+			}
+		}
     }else {
         [self stopTimer];
     }
@@ -69,20 +72,18 @@
 }
 
 - (void)setRemoteImagesURL:(NSArray<NSString *> *)remoteImagesURL {
-    NSAssert(remoteImagesURL.count > 0, @"展示的广告数必须大于0");
-    if (remoteImagesURL.count == 1) {
-        _remoteImagesURL = remoteImagesURL;
-    }else {
-        NSMutableArray *tempArray = [NSMutableArray arrayWithObject:[remoteImagesURL lastObject]];
-        [tempArray addObjectsFromArray:remoteImagesURL];
-        [tempArray addObject:[remoteImagesURL firstObject]];
-        _remoteImagesURL = [tempArray copy];
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [easyAdCollectionView reloadData];
-        pageControl.numberOfPages = _remoteImagesURL.count > 1 ? _remoteImagesURL.count - 2 : _remoteImagesURL.count;
-    });
+	if (remoteImagesURL.count > 0) {
+		NSMutableArray *tempArray = [NSMutableArray arrayWithObject:[remoteImagesURL lastObject]];
+		[tempArray addObjectsFromArray:remoteImagesURL];
+		[tempArray addObject:[remoteImagesURL firstObject]];
+		_remoteImagesURL = [tempArray copy];
+		
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[easyAdCollectionView reloadData];
+			pageControl.numberOfPages = _remoteImagesURL.count > 1 ? _remoteImagesURL.count - 2 : _remoteImagesURL.count;
+		});
+	}
 }
 
 #pragma mark - Initialization
@@ -93,7 +94,7 @@
     easyAdCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT) collectionViewLayout:flowLayout];
     easyAdCollectionView.delegate = self;
     easyAdCollectionView.dataSource = self;
-    easyAdCollectionView.backgroundColor = [UIColor greenColor];
+    easyAdCollectionView.backgroundColor = [UIColor blackColor];
     easyAdCollectionView.pagingEnabled = YES;
     easyAdCollectionView.bounces = NO;
     easyAdCollectionView.showsHorizontalScrollIndicator = NO;
@@ -109,25 +110,31 @@
     pageControl.currentPageIndicatorTintColor = _currentPageIndicatorTintColor;
     [self addSubview:pageControl];
 }
+	
+- (void)layoutSubviews {
+	[super layoutSubviews];
+	
+	[self setupContentView];
+}
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    NSLog(@"被拖拽");
+    //NSLog(@"被拖拽");
     [self stopTimer];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    NSLog(@"结束拖拽");
+    //NSLog(@"结束拖拽");
     _shouldAutoScrolling ? [self startTimer] : nil;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"scrollViewDidEndDecelerating");
+    //NSLog(@"scrollViewDidEndDecelerating");
     [self scrollViewDidEndScrollingAnimation:scrollView];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    NSLog(@"scrollViewDidEndScrollingAnimation");
+    //NSLog(@"scrollViewDidEndScrollingAnimation");
     
     CGPoint offset = easyAdCollectionView.contentOffset;
     currentPage = offset.x / FULL_VIEW_WIDTH;
@@ -148,8 +155,13 @@
 
 #pragma mark - UICollectionView Delegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *remoteImageURL = _remoteImagesURL[indexPath.item];
-    NSLog(@"点击的链接是%@",remoteImageURL);
+	NSInteger remoteImageItem = (NSInteger)indexPath.item;
+	NSInteger remoteImageIndex = remoteImageItem - 1;
+	NSString *remoteImageURL = _remoteImagesURL[remoteImageItem];
+	//NSLog(@"点击的链接是%@",remoteImageURL);
+	
+	//add tap event callback by xusion
+	self.onTap(remoteImageIndex,remoteImageURL);
 }
 
 #pragma mark - UICollectionView Data Source
@@ -162,7 +174,8 @@
     UIImageView *imageView = [cell.contentView viewWithTag:100];
     if (!imageView) {
         imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT)];
-        imageView.backgroundColor = [UIColor whiteColor];
+        imageView.backgroundColor = [UIColor blackColor];
+		imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.tag = 100;
         [cell addSubview:imageView];
     }
@@ -171,7 +184,7 @@
             NSLog(@"图片下载失败，imageURL = %@",imageURL);
         }
     }];
-    
+	
     return cell;
 }
 
