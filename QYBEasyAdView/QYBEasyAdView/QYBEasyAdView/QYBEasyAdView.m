@@ -86,6 +86,16 @@
 	}
 }
 
+- (void)setCurrentPageIndicatorTintColor:(UIColor *)currentPageIndicatorTintColor {
+	_currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+	pageControl.currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+}
+	
+- (void)setPageIndicatorTintColor:(UIColor *)pageIndicatorTintColor {
+	_pageIndicatorTintColor = pageIndicatorTintColor;
+	pageControl.pageIndicatorTintColor = pageIndicatorTintColor;
+}
+	
 #pragma mark - Initialization
 - (void)setupContentView {
     UICollectionViewFlowLayout *flowLayout = [UICollectionViewFlowLayout new];
