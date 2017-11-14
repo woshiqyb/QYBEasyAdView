@@ -112,12 +112,12 @@
 
 #pragma mark - UIScrollView Delegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    NSLog(@"被拖拽");
+    //NSLog(@"被拖拽");
     [self stopTimer];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    NSLog(@"结束拖拽");
+    //NSLog(@"结束拖拽");
     _shouldAutoScrolling ? [self startTimer] : nil;
 }
 
@@ -148,8 +148,13 @@
 
 #pragma mark - UICollectionView Delegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *remoteImageURL = _remoteImagesURL[indexPath.item];
-    NSLog(@"点击的链接是%@",remoteImageURL);
+	NSInteger remoteImageItem = (NSInteger)indexPath.item;
+	NSInteger remoteImageIndex = remoteImageItem - 1;
+	NSString *remoteImageURL = _remoteImagesURL[remoteImageItem];
+	//NSLog(@"点击的链接是%@",remoteImageURL);
+	
+	//add tap event callback by xusion
+	self.onTap(remoteImageIndex,remoteImageURL);
 }
 
 #pragma mark - UICollectionView Data Source
