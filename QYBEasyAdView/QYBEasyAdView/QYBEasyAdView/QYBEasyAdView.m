@@ -86,6 +86,16 @@
 	}
 }
 
+- (void)setCurrentPageIndicatorTintColor:(UIColor *)currentPageIndicatorTintColor {
+	_currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+	pageControl.currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+}
+	
+- (void)setPageIndicatorTintColor:(UIColor *)pageIndicatorTintColor {
+	_pageIndicatorTintColor = pageIndicatorTintColor;
+	pageControl.pageIndicatorTintColor = pageIndicatorTintColor;
+}
+	
 #pragma mark - Initialization
 - (void)setupContentView {
     UICollectionViewFlowLayout *flowLayout = [UICollectionViewFlowLayout new];
@@ -114,7 +124,10 @@
 - (void)layoutSubviews {
 	[super layoutSubviews];
 	
-	[self setupContentView];
+	//auto resize view by xusion
+	easyAdCollectionView.frame = CGRectMake(0, 0, FULL_VIEW_WIDTH, FULL_VIEW_HEIGHT);
+	easyAdCollectionView.contentSize = CGSizeMake(FULL_VIEW_WIDTH * _remoteImagesURL.count, FULL_VIEW_HEIGHT);
+	pageControl.frame = CGRectMake(0, FULL_VIEW_HEIGHT - 40, FULL_VIEW_WIDTH, 40);
 }
 
 #pragma mark - UIScrollView Delegate
@@ -155,10 +168,9 @@
 
 #pragma mark - UICollectionView Delegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-	NSInteger remoteImageItem = (NSInteger)indexPath.item;
-	NSInteger remoteImageIndex = remoteImageItem - 1;
-	NSString *remoteImageURL = _remoteImagesURL[remoteImageItem];
-	//NSLog(@"点击的链接是%@",remoteImageURL);
+	NSInteger remoteImageIndex = currentPage - 1;
+	NSString *remoteImageURL = _remoteImagesURL[indexPath.item];
+	//NSLog(@"点击的链接是%ld %@",(long)remoteImageIndex,remoteImageURL);
 	
 	//add tap event callback by xusion
 	self.onTap(remoteImageIndex,remoteImageURL);
