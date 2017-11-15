@@ -168,10 +168,9 @@
 
 #pragma mark - UICollectionView Delegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-	NSInteger remoteImageItem = (NSInteger)indexPath.item;
-	NSInteger remoteImageIndex = remoteImageItem - 1;
-	NSString *remoteImageURL = _remoteImagesURL[remoteImageItem];
-	//NSLog(@"点击的链接是%@",remoteImageURL);
+	NSInteger remoteImageIndex = currentPage - 1;
+	NSString *remoteImageURL = _remoteImagesURL[indexPath.item];
+	//NSLog(@"点击的链接是%ld %@",(long)remoteImageIndex,remoteImageURL);
 	
 	//add tap event callback by xusion
 	self.onTap(remoteImageIndex,remoteImageURL);
